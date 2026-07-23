@@ -315,7 +315,7 @@
   .map-svg-wrap svg .iran-outline{ fill:var(--surface-2); stroke:var(--line); stroke-width:1; }
   .map-svg-wrap svg .water{ fill:#dbe6f7; stroke:none; }
   .map-svg-wrap svg .province-shape{
-    stroke:#fff; stroke-width:1.1; cursor:pointer; transition:filter .12s ease, stroke-width .12s ease;
+    fill:var(--surface-2); stroke:#fff; stroke-width:1.1; cursor:pointer; transition:filter .12s ease, stroke-width .12s ease;
   }
   .map-svg-wrap svg .province-shape:hover, .map-svg-wrap svg .province-shape.is-hover{
     stroke:var(--navy-900); stroke-width:2.2; filter:brightness(1.04);
@@ -876,12 +876,23 @@ function cloudIsConfigured(){
 
 async function cloudRequest(payload){
   if (!cloudIsConfigured()) throw new Error('Google Apps Script URL is not configured.');
-  const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-    method: 'POST',
-    redirect: 'follow',
-    headers: {'Content-Type': 'text/plain;charset=utf-8'},
-    body: JSON.stringify(payload),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 12000);
+  let response;
+  try {
+    response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+  } catch (err){
+    if (err && err.name === 'AbortError') throw new Error('Request to Google Sheets timed out (12s).');
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
+  }
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const result = await response.json();
   if (!result.ok) throw new Error(result.error || 'Google Sheets request failed.');
@@ -1154,39 +1165,46 @@ async function refreshMap(){
   statusEl.className = 'map-status';
   statusEl.textContent = 'در حال بارگذاری ارزیابی‌های ذخیره‌شده…';
 
-  const { byCity, cloudFailed } = await gatherAllRecords();
-  const provinceRecords = {};
-  const unmatched = [];
-  Object.keys(byCity).forEach(city => {
-    const state = byCity[city];
-    if (!state) return;
-    const slug = matchProvinceSlug(city);
-    const record = { city, totalScore: Number(state.totalScore || 0), performanceBand: state.performanceBand || '' };
-    if (slug && PROVINCE_PATHS[slug]){
-      (provinceRecords[slug] = provinceRecords[slug] || []).push(record);
-    } else {
-      unmatched.push(record);
-    }
-  });
-  window.__mapProvinceRecords = provinceRecords;
-  colorMap(provinceRecords);
-  renderUnmatchedPanel(unmatched);
+  try {
+    const { byCity, cloudFailed } = await gatherAllRecords();
+    const provinceRecords = {};
+    const unmatched = [];
+    Object.keys(byCity).forEach(city => {
+      const state = byCity[city];
+      if (!state) return;
+      const slug = matchProvinceSlug(city);
+      const record = { city, totalScore: Number(state.totalScore || 0), performanceBand: state.performanceBand || '' };
+      if (slug && PROVINCE_PATHS[slug]){
+        (provinceRecords[slug] = provinceRecords[slug] || []).push(record);
+      } else {
+        unmatched.push(record);
+      }
+    });
+    window.__mapProvinceRecords = provinceRecords;
+    colorMap(provinceRecords);
+    renderUnmatchedPanel(unmatched);
 
-  const total = Object.keys(byCity).length;
-  if (cloudFailed){
+    const total = Object.keys(byCity).length;
+    if (cloudFailed){
+      statusEl.className = 'map-status err';
+      const localNote = total > 0 ? `${total} ارزیابی محلی همین مرورگر نمایش داده شد. ` : 'هیچ ارزیابی محلی در این مرورگر یافت نشد. ';
+      statusEl.textContent = localNote +
+        'اتصال به Google Sheets ناموفق بود، پس نتایج ثبت‌شده در مرورگرهای دیگر دیده نمی‌شود. ' +
+        'علت معمول: فایل به‌صورت مستقیم (file://) باز شده — آن را از طریق یک سرور محلی یا میزبانی وب باز کنید؛ ' +
+        'یا دسترسی انتشار Google Apps Script روی «Anyone» تنظیم نشده است.';
+    } else if (total === 0){
+      statusEl.className = 'map-status';
+      statusEl.textContent = 'هنوز هیچ ارزیابی‌ای ذخیره نشده است. یک شهر را در بخش «تکمیل ارزیابی» ثبت کنید.';
+    } else {
+      const matchedCount = total - unmatched.length;
+      statusEl.className = 'map-status ok';
+      statusEl.textContent = `${total} ارزیابی بارگذاری شد — ${matchedCount} مورد به‌صورت خودکار به استان متصل شد.`;
+    }
+  } catch (err){
+    console.error('refreshMap failed:', err);
     statusEl.className = 'map-status err';
-    const localNote = total > 0 ? `${total} ارزیابی محلی همین مرورگر نمایش داده شد. ` : 'هیچ ارزیابی محلی در این مرورگر یافت نشد. ';
-    statusEl.textContent = localNote +
-      'اتصال به Google Sheets ناموفق بود، پس نتایج ثبت‌شده در مرورگرهای دیگر دیده نمی‌شود. ' +
-      'علت معمول: فایل به‌صورت مستقیم (file://) باز شده — آن را از طریق یک سرور محلی یا میزبانی وب باز کنید؛ ' +
-      'یا دسترسی انتشار Google Apps Script روی «Anyone» تنظیم نشده است.';
-  } else if (total === 0){
-    statusEl.className = 'map-status';
-    statusEl.textContent = 'هنوز هیچ ارزیابی‌ای ذخیره نشده است. یک شهر را در بخش «تکمیل ارزیابی» ثبت کنید.';
-  } else {
-    const matchedCount = total - unmatched.length;
-    statusEl.className = 'map-status ok';
-    statusEl.textContent = `${total} ارزیابی بارگذاری شد — ${matchedCount} مورد به‌صورت خودکار به استان متصل شد.`;
+    statusEl.textContent = 'خطای غیرمنتظره در بارگذاری نقشه: ' + (err && err.message ? err.message : String(err)) +
+      ' — برای جزئیات بیشتر، Console مرورگر (F12) را بررسی کنید.';
   }
 }
 
