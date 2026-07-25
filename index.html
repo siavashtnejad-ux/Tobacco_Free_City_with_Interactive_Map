@@ -255,239 +255,67 @@
   }
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
-  /* ---------- Clean A4 report ---------- */
-  @page{
-    size:A4 portrait;
-    margin:12mm 11mm 14mm;
-  }
+  /* ---------- Print report (built dynamically, hidden on screen) ---------- */
+  .print-only{ display:none; }
+
+  #printReport{ font-family:'Vazirmatn',system-ui,sans-serif; color:var(--ink); }
+  .pr-header{ text-align:center; padding-bottom:14px; margin-bottom:18px; border-bottom:2px solid var(--navy-700); }
+  .pr-title{ font-size:21px; font-weight:800; color:var(--navy-900); }
+  .pr-subtitle{ font-size:11.5px; color:var(--ink-soft); margin-top:6px; line-height:1.6; }
+
+  .pr-meta{ display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; font-size:12px; margin-bottom:16px; background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:11px 15px; page-break-inside:avoid; }
+  .pr-meta div b{ color:var(--ink-soft); font-weight:700; margin-inline-end:5px; }
+
+  .pr-score-card{ display:flex; align-items:center; gap:20px; border:1.5px solid var(--line); border-radius:12px; padding:14px 18px; margin-bottom:20px; page-break-inside:avoid; }
+  .pr-score-num{ font-size:36px; font-weight:800; color:var(--navy-900); flex:0 0 auto; }
+  .pr-score-num small{ font-size:13px; font-weight:600; color:var(--ink-soft); }
+  .pr-score-info{ flex:1 1 auto; min-width:0; }
+  .pr-band{ display:inline-block; font-weight:700; font-size:12.5px; padding:4px 13px; border-radius:999px; margin-bottom:8px; }
+  .pr-progress{ height:7px; border-radius:99px; background:var(--line-soft); overflow:hidden; }
+  .pr-progress-fill{ height:100%; background:linear-gradient(90deg, var(--navy-500), var(--accent)); }
+  .pr-answered{ font-size:11px; color:var(--ink-soft); margin-top:7px; }
+
+  .pr-summary-table{ width:100%; border-collapse:collapse; font-size:11.5px; margin-bottom:24px; }
+  .pr-summary-table th, .pr-summary-table td{ border:1px solid var(--line); padding:6px 10px; text-align:right; }
+  .pr-summary-table th{ background:var(--surface-2); font-weight:700; color:var(--ink-soft); }
+  .pr-summary-table td:first-child, .pr-summary-table th:first-child{ text-align:center; width:42px; }
+  .pr-summary-table td:last-child, .pr-summary-table th:last-child{ text-align:center; width:95px; font-weight:700; }
+  .pr-summary-table tr{ page-break-inside:avoid; }
+
+  .pr-details-title{ font-size:15.5px; font-weight:800; margin:4px 0 14px; padding-bottom:7px; border-bottom:2px solid var(--line); page-break-after:avoid; }
+
+  .pr-step{ margin-bottom:18px; }
+  .pr-step-head{ display:flex; justify-content:space-between; align-items:center; background:var(--lilac); color:var(--navy-900); font-weight:800; font-size:13px; padding:9px 13px; border-radius:9px 9px 0 0; page-break-after:avoid; page-break-inside:avoid; }
+  .pr-step-score{ font-weight:700; font-size:12px; background:#fff; padding:3px 11px; border-radius:999px; }
+
+  .pr-item{ border:1px solid var(--line); border-top:none; padding:9px 13px; page-break-inside:avoid; }
+  .pr-item-main{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .pr-item-text{ font-size:12px; flex:1 1 auto; line-height:1.6; }
+  .pr-code{ color:var(--navy-700); font-weight:700; margin-inline-end:6px; }
+  .pr-badge{ flex:0 0 auto; font-size:10.5px; font-weight:700; padding:4px 11px; border-radius:999px; white-space:nowrap; }
+  .pr-badge.pr-full{ background:var(--green-bg); color:var(--green); }
+  .pr-badge.pr-partial{ background:var(--orange-bg); color:var(--orange); }
+  .pr-badge.pr-none{ background:var(--red-bg); color:var(--red); }
+  .pr-badge.pr-empty{ background:var(--surface-2); color:var(--ink-faint); }
+  .pr-item-meta{ font-size:10.5px; color:var(--ink-soft); margin-top:5px; line-height:1.6; }
+  .pr-item-meta b{ font-weight:700; color:var(--ink); }
+
+  .pr-legend{ margin-top:20px; page-break-inside:avoid; }
+  .pr-legend-title{ font-size:13.5px; font-weight:800; margin-bottom:9px; }
+  .pr-legend-grid{ display:flex; gap:2px; border-radius:10px; overflow:hidden; border:1px solid var(--line-soft); }
+  .pr-legend-item{ flex:1 1 0; padding:9px; font-size:11px; font-weight:700; text-align:center; }
+  .pr-legend-item span{ display:block; font-size:9.5px; font-weight:600; opacity:.75; margin-top:2px; }
+
+  .pr-footer{ margin-top:22px; font-size:10px; color:var(--ink-faint); text-align:center; }
+
   @media print{
-    :root{
-      --ink:#172033;
-      --ink-soft:#536078;
-      --line:#d9dfeb;
-      --line-soft:#e9edf4;
-      --surface-2:#f5f7fb;
-    }
-    *{
-      -webkit-print-color-adjust:exact !important;
-      print-color-adjust:exact !important;
-    }
-    html, body{
-      width:auto;
-      min-height:0;
-      background:#fff !important;
-    }
-    body{
-      padding:0;
-      color:var(--ink);
-      font-size:10pt;
-      line-height:1.55;
-    }
-    .hero{
-      margin:0 0 5mm;
-      padding:0 0 4mm;
-      overflow:visible;
-      color:var(--ink);
-      background:none !important;
-      border-bottom:1.5pt solid var(--navy-700);
-      box-shadow:none;
-    }
-    .hero::before, .hero::after, .view-tabs{display:none !important;}
-    .hero-inner{max-width:none;}
-    .eyebrow{
-      padding:0;
-      color:var(--navy-700);
-      background:none;
-      border:0;
-      font-size:8.5pt;
-    }
-    .hero h1{
-      margin:1.5mm 0 1mm;
-      color:var(--navy-900);
-      font-size:20pt;
-      line-height:1.35;
-    }
-    .hero p{
-      max-width:none;
-      margin:0;
-      color:var(--ink-soft);
-      font-size:9pt;
-      line-height:1.6;
-    }
-    .wrap{
-      max-width:none;
-      margin:0;
-      padding:0;
-    }
-    #mapView, .saved-bar, .dock-actions, .toast{display:none !important;}
-    #assessmentView{display:block !important;}
-    .id-card{
-      grid-template-columns:1fr 1.35fr .85fr;
-      gap:3mm;
-      padding:3.5mm;
-      border:1pt solid var(--line);
-      border-radius:3mm;
-      box-shadow:none;
-      animation:none;
-      break-inside:avoid;
-    }
-    .field label{
-      margin-bottom:1mm;
-      font-size:8pt;
-    }
-    .field input, .date-readout{
-      min-height:9mm;
-      padding:2mm 2.5mm;
-      border:0;
-      border-radius:2mm;
-      background:var(--surface-2) !important;
-      color:var(--ink);
-      font-size:9.5pt;
-    }
-    .dock{
-      position:static;
-      margin:3.5mm 0 0;
-      padding:3mm 4mm;
-      gap:4mm;
-      background:#fff !important;
-      border:1pt solid var(--line);
-      border-radius:3mm;
-      box-shadow:none;
-      animation:none;
-      break-inside:avoid;
-    }
-    .gauge, .gauge svg{width:15mm; height:15mm;}
-    .gauge .num{font-size:11pt;}
-    .gauge .num small{font-size:6.5pt;}
-    .dock-mid .band{
-      margin-bottom:1.5mm;
-      padding:1mm 2.5mm;
-      font-size:8.5pt;
-    }
-    .dock-mid .progress-track{height:2mm;}
-    .dock-mid .answered{margin-top:1.2mm; font-size:8pt;}
-    .steps{
-      margin-top:4mm;
-      gap:3mm;
-    }
-    .step{
-      overflow:visible;
-      border:1pt solid var(--line);
-      border-radius:3mm;
-      box-shadow:none;
-      animation:none !important;
-      break-inside:auto;
-    }
-    .step-head{
-      padding:2.8mm 3.5mm;
-      gap:2.5mm;
-      cursor:default;
-      background:#f0f3f9 !important;
-      break-inside:avoid;
-      break-after:avoid;
-    }
-    .step-num{
-      width:8mm;
-      height:8mm;
-      border-radius:2mm;
-      font-size:10pt;
-    }
-    .step-titles .t-fa{font-size:10.5pt;}
-    .step-meta{font-size:7.5pt;}
-    .step-score{
-      padding:1mm 2mm;
-      font-size:8pt;
-      background:#fff !important;
-      border:0.7pt solid #d5dcf1;
-    }
-    .chev{display:none;}
-    .step-body,
-    .step.open .step-body{
-      display:block !important;
-      max-height:none !important;
-      overflow:visible !important;
-      border-top:1pt solid var(--line);
-    }
-    .step-body-inner{padding:0 3mm 1.5mm;}
-    .item{
-      padding:2.7mm .5mm;
-      border-radius:0;
-      break-inside:avoid;
-    }
-    .item-row{
-      flex-wrap:nowrap;
-      gap:3mm;
-    }
-    .item-text{
-      flex:1 1 auto;
-      font-size:9.5pt;
-      line-height:1.65;
-    }
-    .item-text .code{margin-left:1.5mm;}
-    .item-eval{
-      margin-top:.8mm;
-      font-size:7.5pt;
-    }
-    .rubric-toggle, .rubric{display:none !important;}
-    .opts{
-      flex:0 0 73mm;
-      justify-content:stretch;
-      gap:1.2mm;
-      padding:0;
-      background:transparent !important;
-      border:0;
-    }
-    .opt{
-      display:block;
-      flex:1 1 0;
-      min-width:0;
-      padding:1.5mm 1mm;
-      border:1pt solid currentColor;
-      font-size:7.3pt;
-      line-height:1.35;
-      white-space:nowrap;
-      box-shadow:none;
-    }
-    .opt[data-v="0"]{
-      color:var(--red);
-      background:var(--red-bg) !important;
-      border-color:var(--red);
-    }
-    .opt[data-v="1"]{
-      color:#a45f19;
-      background:var(--orange-bg) !important;
-      border-color:var(--orange);
-    }
-    .opt[data-v="2"]{
-      color:var(--green);
-      background:var(--green-bg) !important;
-      border-color:var(--green);
-    }
-    .opt.sel{
-      border-width:1.8pt;
-      font-weight:900;
-      box-shadow:inset 0 0 0 .6pt currentColor;
-    }
-    .opt.sel::before{
-      content:"✓ ";
-      font-weight:900;
-    }
-    .legend{
-      margin-top:4mm;
-      padding:3mm;
-      border:1pt solid var(--line);
-      border-radius:3mm;
-      box-shadow:none;
-      animation:none;
-      break-inside:avoid;
-    }
-    .legend h3{margin-bottom:2mm; font-size:9.5pt;}
-    .legend-grid{border-radius:2mm;}
-    .legend-item{
-      padding:2mm 1.5mm;
-      font-size:8pt;
-    }
-    .legend-item span{font-size:7pt;}
+    @page{ margin:14mm 12mm; }
+    html, body{ background:#fff !important; }
+    body *{ visibility:hidden; }
+    #printReport, #printReport *{ visibility:visible; }
+    .print-only{ display:block !important; }
+    #printReport{ position:absolute; inset:0 auto auto 0; width:100%; margin:0; padding:0; }
+    .toast{ display:none !important; }
   }
 
   /* ---------- View tabs ---------- */
@@ -656,6 +484,8 @@
   </div>
 
 </div>
+
+<div id="printReport" class="print-only"></div>
 
 <div class="toast" id="toast"></div>
 
@@ -855,6 +685,94 @@ function bandFor(score){
   return {label:'قابل‌قبول (سبز)', color:'var(--green)', bg:'var(--green-bg)', hex:'#3f9152'};
 }
 
+/* ---------- Print / PDF report ---------- */
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function answerBadge(v){
+  if (v === 2) return {label:'کامل', cls:'pr-full'};
+  if (v === 1) return {label:'ناکامل', cls:'pr-partial'};
+  if (v === 0) return {label:'انجام‌نشده', cls:'pr-none'};
+  return {label:'بدون پاسخ', cls:'pr-empty'};
+}
+function buildPrintReport(){
+  const city = document.getElementById('cityName').value.trim();
+  const evalNames = document.getElementById('evalName').value.trim();
+  const dateText = (document.getElementById('evalDateText').textContent || '').trim();
+  const total = DATA.reduce((s, g) => s + stepScore(g), 0);
+  const answeredCount = Object.keys(answers).length;
+  const band = bandFor(total);
+  const pct = Math.max(0, Math.min(100, Math.round((total / MAX_SCORE) * 100)));
+
+  const summaryRows = DATA.map(g => `
+    <tr>
+      <td>${faDigits(g.step)}</td>
+      <td>${escapeHtml(g.title)}</td>
+      <td>${faDigits(stepScore(g))} / ${faDigits(stepMaxScore(g))}</td>
+    </tr>`).join('');
+
+  const stepSections = DATA.map(g => {
+    const itemsHtml = g.items.map(it => {
+      const v = answers[it.code];
+      const badge = answerBadge(v);
+      const ruleText = (v !== undefined && it.r[v]) ? it.r[v] : '';
+      return `
+        <div class="pr-item">
+          <div class="pr-item-main">
+            <div class="pr-item-text"><span class="pr-code">${escapeHtml(it.code)}</span>${escapeHtml(it.text)}</div>
+            <div class="pr-badge ${badge.cls}">${badge.label}</div>
+          </div>
+          <div class="pr-item-meta"><b>روش ارزیابی:</b> ${escapeHtml(it.eval)}${ruleText ? ' — ' + escapeHtml(ruleText) : ''}</div>
+        </div>`;
+    }).join('');
+    return `
+      <div class="pr-step">
+        <div class="pr-step-head">
+          <span>گام ${faDigits(g.step)}: ${escapeHtml(g.title)}</span>
+          <span class="pr-step-score">${faDigits(stepScore(g))} / ${faDigits(stepMaxScore(g))}</span>
+        </div>
+        ${itemsHtml}
+      </div>`;
+  }).join('');
+
+  document.getElementById('printReport').innerHTML = `
+    <div class="pr-header">
+      <div class="pr-title">چک‌لیست ارزیابی شهر بدون دخانیات</div>
+      <div class="pr-subtitle">بر اساس «راهنمای گام‌به‌گام پیاده‌سازی شهر بدون دخانیات» — جمعیت مبارزه با دخانیات ایران</div>
+    </div>
+    <div class="pr-meta">
+      <div><b>شهر / شهرستان:</b> ${escapeHtml(city || '—')}</div>
+      <div><b>اعضای تیم ارزیابی:</b> ${escapeHtml(evalNames || '—')}</div>
+      <div><b>تاریخ ارزیابی:</b> ${escapeHtml(dateText || '—')}</div>
+    </div>
+    <div class="pr-score-card">
+      <div class="pr-score-num">${faDigits(total)}<small> / ۷۰</small></div>
+      <div class="pr-score-info">
+        <div class="pr-band" style="background:${band.bg};color:${band.color}">${band.label}</div>
+        <div class="pr-progress"><div class="pr-progress-fill" style="width:${pct}%"></div></div>
+        <div class="pr-answered">${faDigits(answeredCount)} از ${faDigits(TOTAL_ITEMS)} شاخص پاسخ داده شده</div>
+      </div>
+    </div>
+    <table class="pr-summary-table">
+      <thead><tr><th>گام</th><th>عنوان</th><th>امتیاز</th></tr></thead>
+      <tbody>${summaryRows}</tbody>
+    </table>
+    <div class="pr-details-title">جزئیات پاسخ‌ها</div>
+    ${stepSections}
+    <div class="pr-legend">
+      <div class="pr-legend-title">راهنمای امتیاز کسب‌شده</div>
+      <div class="pr-legend-grid">
+        <div class="pr-legend-item" style="background:var(--red-bg);color:var(--red)">۰-۲۰<span>عملکرد ضعیف</span></div>
+        <div class="pr-legend-item" style="background:var(--orange-bg);color:var(--orange)">۲۱-۳۳<span>کمتر از حد انتظار</span></div>
+        <div class="pr-legend-item" style="background:var(--yellow-bg);color:var(--yellow)">۳۴-۵۲<span>نسبتاً قابل‌قبول</span></div>
+        <div class="pr-legend-item" style="background:var(--green-bg);color:var(--green)">۵۳-۷۰<span>قابل‌قبول</span></div>
+      </div>
+    </div>
+    <div class="pr-footer">تهیه‌شده در تاریخ ${escapeHtml(new Date().toLocaleDateString('fa-IR'))} — سامانهٔ چک‌لیست ارزیابی شهر بدون دخانیات</div>
+  `;
+}
+window.addEventListener('beforeprint', buildPrintReport);
+
 function updateAll(){
   let total = 0, answeredCount = 0;
   DATA.forEach((group, gi) => {
@@ -933,7 +851,7 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   showToast('پاسخ‌ها پاک شدند.');
 });
 
-document.getElementById('printBtn').addEventListener('click', () => window.print());
+document.getElementById('printBtn').addEventListener('click', () => { buildPrintReport(); window.print(); });
 
 function currentState(){
   const totalScore = Object.values(answers).reduce((sum, value) => sum + Number(value || 0), 0);
