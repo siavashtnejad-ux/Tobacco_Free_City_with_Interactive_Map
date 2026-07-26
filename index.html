@@ -221,6 +221,41 @@
   .opt[data-v="1"].sel{background:var(--orange); color:#fff; box-shadow:0 6px 14px -6px rgba(217,138,53,.55);}
   .opt[data-v="2"].sel{background:var(--green); color:#fff; box-shadow:0 6px 14px -6px rgba(63,145,82,.55);}
 
+  /* ---------- Step recommendations ---------- */
+  .recommendation-panel{
+    margin:14px 0 4px; border:1px solid #d9def7; border-radius:16px;
+    background:linear-gradient(145deg, #f8f9ff 0%, #eef1fd 100%);
+    padding:17px 18px; box-shadow:0 12px 28px -22px rgba(52,87,217,.55);
+    animation:fadeUp .3s ease both;
+  }
+  .recommendation-head{display:flex; align-items:flex-start; gap:11px;}
+  .recommendation-icon{
+    flex:0 0 auto; width:34px; height:34px; border-radius:11px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(145deg, var(--navy-700), var(--accent)); color:#fff;
+    font-size:17px; box-shadow:0 8px 18px -10px rgba(52,87,217,.75);
+  }
+  .recommendation-title{font-size:14.5px; font-weight:800; color:var(--navy-900);}
+  .recommendation-summary{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+  .recommendation-list{list-style:none; margin:14px 0 0; padding:0; display:grid; gap:9px;}
+  .recommendation-item{
+    display:flex; align-items:flex-start; gap:9px; background:rgba(255,255,255,.78);
+    border:1px solid rgba(215,221,246,.9); border-radius:12px; padding:10px 11px;
+    font-size:12.5px; color:var(--ink); line-height:1.8;
+  }
+  .recommendation-priority{
+    flex:0 0 auto; border-radius:999px; padding:2px 8px; margin-top:1px;
+    font-size:10px; font-weight:800; white-space:nowrap;
+  }
+  .recommendation-priority.high{background:var(--red-bg); color:var(--red);}
+  .recommendation-priority.medium{background:var(--orange-bg); color:var(--orange);}
+  .recommendation-priority.done{background:var(--green-bg); color:var(--green);}
+  .recommendation-note{margin-top:11px; font-size:10.5px; color:var(--ink-soft);}
+  @media (max-width:560px){
+    .recommendation-panel{padding:15px 13px;}
+    .recommendation-item{flex-direction:column; gap:5px;}
+  }
+
   /* ---------- Legend / targets ---------- */
   .legend, .targets{
     margin-top:28px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px;
@@ -586,6 +621,44 @@ const DATA = [
 ]},
 ];
 
+const RECOMMENDED_ACTIONS = {
+  "1-1":"موضوع سیاست شهر بدون دخانیات را در دستور کار کارگروه سلامت و امنیت غذایی قرار دهید و مصوبه و صورت‌جلسهٔ رسمی تهیه کنید.",
+  "2-1":"اعضای کارگروه اجرایی را از دستگاه‌های مسئول تعیین کنید و ابلاغ رسمی همهٔ اعضا را صادر و بایگانی کنید.",
+  "3-1":"دبیر کارگروه و محل دبیرخانه را با شرح وظایف، مسیر مکاتبات و مسئول پیگیری مشخص کنید.",
+  "4-1":"تقویم جلسات ماهانه را تصویب کنید و در هر جلسه پیشرفت اقدامات، مسئول هر کار و مهلت بعدی را ثبت کنید.",
+  "5-1":"برنامهٔ عملیاتی زمان‌بندی‌شده شامل اقدام، مسئول، منابع، شاخص خروجی و مهلت اجرا تدوین کنید.",
+  "1-2":"مصوبه و الزامات شهر بدون دخانیات را با نامهٔ رسمی به همهٔ سازمان‌ها، ادارات، مراکز خدماتی و تشکل‌های هدف ابلاغ کنید.",
+  "2-2":"برای ورودی‌های شهر و میادین اصلی تابلوهای استاندارد، خوانا و مقاوم طراحی و نصب کنید و بازدید دوره‌ای آن‌ها را برنامه‌ریزی کنید.",
+  "3-2":"تقویم محتوایی مستمر برای صفحات پربینندهٔ شهر تنظیم کنید و پیام‌ها، ویدئوها و گزارش اقدامات را با سنجش میزان بازدید منتشر کنید.",
+  "4-2":"علائم ممنوعیت مصرف دخانیات و مسیر گزارش تخلف را در ورودی و نقاط پرتردد همهٔ اماکن عمومی نصب و کنترل کنید.",
+  "1-3":"پیمایش مصرف دخانیات را با پرسش‌نامهٔ استاندارد، نمونه‌گیری مشخص و گزارش تحلیلی قابل تکرار اجرا کنید.",
+  "2-3":"چک‌لیست بازدید از اماکن و ناوگان عمومی تهیه کنید، نمونهٔ هدف را بررسی و موارد عدم رعایت را ثبت و پیگیری کنید.",
+  "3-3":"پایش میدانی و مجازی تبلیغات آشکار و پنهان دخانیات را اجرا و محل، نوع تخلف و نتیجهٔ رسیدگی را مستند کنید.",
+  "4-3":"پوشش و اثربخشی پیام‌های آموزشی را با شاخص‌هایی مانند تعداد نقاط، تکرار انتشار، دسترسی و یادآوری مخاطبان ارزیابی کنید.",
+  "5-3":"فهرست مراکز فروش را با اطلاعات صمت و اصناف تطبیق دهید و وضعیت مجوز هر مرکز و اقدام اصلاحی لازم را ثبت کنید.",
+  "6-3":"مراکز آموزشی، فرهنگی، مذهبی و ورزشی را نقشه‌برداری کنید و فروشندگان واقع در حریم ۱۰۰ متری را شناسایی و تعیین تکلیف کنید.",
+  "7-3":"دیدگاه شهروندان و مسئولان را با پرسش‌نامه یا مصاحبهٔ ساختاریافته جمع‌آوری، تحلیل و در برنامهٔ عملیاتی منعکس کنید.",
+  "1-4":"جلسهٔ رسمی ذی‌نفعان کلیدی را با دستور جلسه، فهرست حضور، تعهدات هر دستگاه و صورت‌جلسه برگزار کنید.",
+  "2-4":"افراد بانفوذ شهر را شناسایی و برای دریافت حمایت علنی، پیام مشترک یا تعهد اجرایی با آنان رایزنی مستند انجام دهید.",
+  "3-4":"دعوت‌نامه و بستهٔ مشارکت مشخص برای سازمان‌ها، سمن‌ها، خیرین و بنیادها تهیه کنید و نوع همکاری مورد انتظار را روشن بنویسید.",
+  "1-5":"ممنوعیت تبلیغات آشکار و پنهان را به اصناف و رسانه‌ها ابلاغ کنید و سازوکار بازدید، گزارش مردمی و برخورد با تخلف ایجاد کنید.",
+  "2-5":"نمایش محصولات و ابزار مصرف دخانیات را در ویترین، قفسه و معابر پایش کنید و برای جمع‌آوری موارد تبلیغاتی مهلت و ضمانت اجرا تعیین کنید.",
+  "1-6":"طرح‌های پیشگیری و توانمندسازی را با همکاری آموزش‌وپرورش در مدارس هدف اجرا و حضور، محتوا و نتایج یادگیری را ثبت کنید.",
+  "2-6":"دورهٔ پیشگیری و ترک دخانیات را در برنامهٔ آموزش ضمن خدمت سازمان‌ها قرار دهید و پوشش کارکنان را دوره‌ای گزارش کنید.",
+  "3-6":"بستهٔ محتوایی معتبر و متنوع برای گروه‌های مختلف تولید یا گردآوری کنید و نسخهٔ قابل انتشار حضوری و دیجیتال آماده سازید.",
+  "4-6":"آموزش قانون، پیامدهای مصرف و مسئولیت صنفی را با همکاری اتحادیه‌ها اجرا و گواهی حضور و ارزیابی یادگیری ثبت کنید.",
+  "1-7":"فهرست فروشندگان مجاز را منتشر و بازدید منظم از مراکز فاقد عاملیت را با ثبت اخطار و نتیجهٔ پیگیری اجرا کنید.",
+  "2-7":"با صمت و اتاق اصناف ضوابط روشن صدور و تمدید مجوز فروش دخانیات، سقف مجوزها و کنترل پیش از صدور را تصویب کنید.",
+  "3-7":"فرآیند مرحله‌ای برخورد با مراکز متخلف، از اخطار تا تعلیق یا ابطال پروانه، را تعریف و اجرای آن را مستند کنید.",
+  "4-7":"حریم ۱۰۰ متری اماکن حساس را روی نقشه مشخص کنید و فروشندگان داخل حریم را با برنامهٔ زمان‌بندی‌شده سامان‌دهی کنید.",
+  "1-8":"حداقل یک مرکز ارائه‌دهندهٔ خدمات ترک را با نیروی آموزش‌دیده، پروتکل خدمت، ساعات فعالیت و مسیر ارجاع مشخص راه‌اندازی کنید.",
+  "2-8":"شمارهٔ ۱۹۰ و نشانی مراکز ترک را در مراکز سلامت، اماکن عمومی، رسانه‌های شهری و شبکه‌های اجتماعی به‌طور مستمر معرفی کنید.",
+  "1-9":"ضوابط محیط بدون دخانیات را در همهٔ اماکن و ناوگان هدف ابلاغ کنید و بازدید، ثبت تخلف و اقدام اصلاحی دوره‌ای داشته باشید.",
+  "2-9":"با شهرداری و امور مالیاتی بستهٔ مشوق شفاف برای رستوران‌ها و کافه‌های دارای گواهی محیط بدون دخانیات طراحی و اجرایی کنید.",
+  "3-9":"برای فروشندگان مجاز که عرضهٔ دخانیات را متوقف می‌کنند، مشوق‌های قابل اجرا تعریف و شرایط دریافت و پایش آن را اعلام کنید.",
+  "1-10":"داشبورد فصلی شاخص‌ها، مسئول گردآوری داده و تقویم گزارش‌دهی را تعیین کنید و نتایج هر فصل را در کارگروه بررسی و پیگیری کنید."
+};
+
 const TOTAL_ITEMS = DATA.reduce((s,g)=>s+g.items.length,0);
 const MAX_SCORE = TOTAL_ITEMS * 2;
 const answers = {};
@@ -637,6 +710,7 @@ function render(){
               </div>
             </div>
           `).join('')}
+          <section class="recommendation-panel" id="recommendation-${gi}" hidden aria-live="polite"></section>
         </div>
       </div>
     `;
@@ -676,6 +750,63 @@ function render(){
   });
 
   document.querySelectorAll('.step.open .step-body').forEach(b => { b.style.maxHeight = b.scrollHeight + 'px'; });
+}
+
+function updateRecommendations(){
+  DATA.forEach((group, gi) => {
+    const panel = document.getElementById(`recommendation-${gi}`);
+    if (!panel) return;
+
+    const completedAnswers = group.items.filter(item => answers[item.code] !== undefined);
+    if (completedAnswers.length < group.items.length){
+      panel.hidden = true;
+      panel.innerHTML = '';
+      return;
+    }
+
+    const pendingItems = group.items.filter(item => Number(answers[item.code]) < 2);
+    const highPriorityCount = pendingItems.filter(item => Number(answers[item.code]) === 0).length;
+    let summary;
+    let actionsHtml;
+
+    if (pendingItems.length === 0){
+      summary = 'همهٔ شاخص‌های این گام کامل ارزیابی شده‌اند.';
+      actionsHtml = `
+        <li class="recommendation-item">
+          <span class="recommendation-priority done">حفظ عملکرد</span>
+          <span>مستندات این گام را به‌روز نگه دارید، مسئول پایش را مشخص کنید و اجرای اقدامات را در بازه‌های منظم دوباره بررسی کنید.</span>
+        </li>`;
+    } else {
+      summary = `${faDigits(pendingItems.length)} اقدام پیشنهادی برای تکمیل این گام` +
+        (highPriorityCount ? `؛ ${faDigits(highPriorityCount)} مورد با اولویت بالا` : '');
+      actionsHtml = pendingItems.map(item => {
+        const isHigh = Number(answers[item.code]) === 0;
+        return `
+          <li class="recommendation-item">
+            <span class="recommendation-priority ${isHigh ? 'high' : 'medium'}">${isHigh ? 'اولویت بالا' : 'نیاز به تکمیل'}</span>
+            <span><b>${item.code}</b> — ${RECOMMENDED_ACTIONS[item.code]}</span>
+          </li>`;
+      }).join('');
+    }
+
+    panel.innerHTML = `
+      <div class="recommendation-head">
+        <div class="recommendation-icon" aria-hidden="true">✓</div>
+        <div>
+          <div class="recommendation-title">اقدامات پیشنهادی گام ${faDigits(group.step)}</div>
+          <div class="recommendation-summary">${summary}</div>
+        </div>
+      </div>
+      <ul class="recommendation-list">${actionsHtml}</ul>
+      <div class="recommendation-note">این پیشنهادها بر اساس پاسخ‌های ثبت‌شده در همین گام اولویت‌بندی شده‌اند.</div>
+    `;
+    panel.hidden = false;
+
+    const stepBody = panel.closest('.step-body');
+    if (stepBody && panel.closest('.step').classList.contains('open')){
+      stepBody.style.maxHeight = stepBody.scrollHeight + 'px';
+    }
+  });
 }
 
 function bandFor(score){
@@ -799,6 +930,7 @@ function updateAll(){
   fillEl.style.strokeDasharray = circumference;
   fillEl.style.strokeDashoffset = circumference * (1 - ratio);
   fillEl.style.stroke = band.hex;
+  updateRecommendations();
 }
 
 render();
