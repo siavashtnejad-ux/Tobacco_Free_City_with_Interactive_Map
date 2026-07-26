@@ -454,7 +454,7 @@
         <circle class="track" cx="37" cy="37" r="31"></circle>
         <circle class="fill" id="gaugeFill" cx="37" cy="37" r="31" stroke-dasharray="194.8" stroke-dashoffset="194.8"></circle>
       </svg>
-      <div class="num"><span id="scoreNum">0</span><small>از ۷۰</small></div>
+      <div class="num"><span id="scoreNum">0</span><small id="scoreMaxLabel"></small></div>
     </div>
     <div class="dock-mid">
       <div class="band" id="bandTag" style="background:var(--red-bg); color:var(--red);">عملکرد ضعیف (قرمز)</div>
@@ -479,10 +479,10 @@
   <div class="legend">
     <h3>راهنمای امتیاز کسب‌شده</h3>
     <div class="legend-grid">
-      <div class="legend-item" style="background:var(--red-bg); color:var(--red);">۲۰–۰<span>عملکرد ضعیف (قرمز)</span></div>
-      <div class="legend-item" style="background:var(--orange-bg); color:var(--orange);">۲۱-۳۳<span>کمتر از حد انتظار (نارنجی)</span></div>
-      <div class="legend-item" style="background:var(--yellow-bg); color:var(--yellow);">۳۴-۵۲<span>نسبتاً قابل‌قبول (زرد)</span></div>
-      <div class="legend-item" style="background:var(--green-bg); color:var(--green);">۵۳-۷۰<span>قابل‌قبول (سبز)</span></div>
+      <div class="legend-item" style="background:var(--red-bg); color:var(--red);">۲۹–۰<span>عملکرد ضعیف (قرمز)</span></div>
+      <div class="legend-item" style="background:var(--orange-bg); color:var(--orange);">۳۰-۴۷<span>کمتر از حد انتظار (نارنجی)</span></div>
+      <div class="legend-item" style="background:var(--yellow-bg); color:var(--yellow);">۴۸-۷۴<span>نسبتاً قابل‌قبول (زرد)</span></div>
+      <div class="legend-item" style="background:var(--green-bg); color:var(--green);">۷۵-۱۰۰<span>قابل‌قبول (سبز)</span></div>
     </div>
   </div>
 </div>
@@ -504,10 +504,10 @@
     <h3>راهنمای رنگ استان‌ها (میانگین امتیاز شهرهای ثبت‌شده)</h3>
     <p style="margin:-6px 0 14px; font-size:12.5px; color:var(--ink-soft);">هر استان تا پیش از ثبت ارزیابی، با یک رنگ اختصاصی و قابل‌تشخیص نمایش داده می‌شود. به‌محض ثبت ارزیابی برای شهری در آن استان، رنگ آن بر اساس میانگین امتیاز شهرهای ارزیابی‌شده (طبق راهنمای زیر) تغییر می‌کند.</p>
     <div class="legend-grid">
-      <div class="legend-item" style="background:var(--red-bg); color:var(--red);">۲۰–۰<span>عملکرد ضعیف</span></div>
-      <div class="legend-item" style="background:var(--orange-bg); color:var(--orange);">۲۱-۳۳<span>کمتر از حد انتظار</span></div>
-      <div class="legend-item" style="background:var(--yellow-bg); color:var(--yellow);">۳۴-۵۲<span>نسبتاً قابل‌قبول</span></div>
-      <div class="legend-item" style="background:var(--green-bg); color:var(--green);">۵۳-۷۰<span>قابل‌قبول</span></div>
+      <div class="legend-item" style="background:var(--red-bg); color:var(--red);">۲۹–۰<span>عملکرد ضعیف</span></div>
+      <div class="legend-item" style="background:var(--orange-bg); color:var(--orange);">۳۰-۴۷<span>کمتر از حد انتظار</span></div>
+      <div class="legend-item" style="background:var(--yellow-bg); color:var(--yellow);">۴۸-۷۴<span>نسبتاً قابل‌قبول</span></div>
+      <div class="legend-item" style="background:var(--green-bg); color:var(--green);">۷۵-۱۰۰<span>قابل‌قبول</span></div>
       <div class="legend-item" style="background:var(--surface-2); color:var(--ink-faint);">—<span>بدون ارزیابی ثبت‌شده</span></div>
     </div>
   </div>
@@ -659,8 +659,15 @@ const RECOMMENDED_ACTIONS = {
   "1-10":"داشبورد فصلی شاخص‌ها، مسئول گردآوری داده و تقویم گزارش‌دهی را تعیین کنید و نتایج هر فصل را در کارگروه بررسی و پیگیری کنید."
 };
 
+// These internal codes correspond to the user's گام–سؤال list:
+// 1-1, 1-5, 2-1, 2-4, 3-1, 4-1, 5-1, 5-2, 6-1, 6-4,
+// 7-1, 7-4, 8-1, 9-1, 10-1.
+const FOUR_POINT_QUESTIONS = new Set([
+  "1-1","5-1","1-2","4-2","1-3","1-4","1-5","2-5",
+  "1-6","4-6","1-7","4-7","1-8","1-9","1-10"
+]);
+
 const TOTAL_ITEMS = DATA.reduce((s,g)=>s+g.items.length,0);
-const MAX_SCORE = TOTAL_ITEMS * 2;
 const answers = {};
 
 const stepsContainer = document.getElementById('stepsContainer');
@@ -669,8 +676,23 @@ function faDigits(n){
   const map = {0:'۰',1:'۱',2:'۲',3:'۳',4:'۴',5:'۵',6:'۶',7:'۷',8:'۸',9:'۹'};
   return String(n).replace(/[0-9]/g, d => map[d]);
 }
-function stepMaxScore(group){ return group.items.length * 2; }
-function stepScore(group){ return group.items.reduce((s,it)=> s + (answers[it.code] !== undefined ? answers[it.code] : 0), 0); }
+function scoreValue(item, answerLevel){
+  const level = Number(answerLevel || 0);
+  return FOUR_POINT_QUESTIONS.has(item.code) ? level * 2 : level;
+}
+function itemMaxScore(item){ return scoreValue(item, 2); }
+function stepMaxScore(group){ return group.items.reduce((sum, item) => sum + itemMaxScore(item), 0); }
+function scoreAnswers(answerMap){
+  return DATA.reduce((total, group) => total + group.items.reduce((sum, item) => {
+    return sum + (answerMap[item.code] !== undefined ? scoreValue(item, answerMap[item.code]) : 0);
+  }, 0), 0);
+}
+function stepScore(group){
+  return group.items.reduce((sum, item) => {
+    return sum + (answers[item.code] !== undefined ? scoreValue(item, answers[item.code]) : 0);
+  }, 0);
+}
+const MAX_SCORE = DATA.reduce((sum, group) => sum + stepMaxScore(group), 0);
 
 function render(){
   stepsContainer.innerHTML = '';
@@ -697,9 +719,9 @@ function render(){
                   <div class="item-eval">${it.eval}</div>
                   <div class="rubric-toggle" data-target="rubric-${gi}-${ii}">نمایش معیار نمره‌دهی</div>
                   <div class="rubric" id="rubric-${gi}-${ii}">
-                    <div class="rubric-row"><div class="rubric-badge">۰</div><div class="rubric-text">${it.r[0]}</div></div>
-                    <div class="rubric-row"><div class="rubric-badge">۱</div><div class="rubric-text">${it.r[1]}</div></div>
-                    <div class="rubric-row"><div class="rubric-badge">۲</div><div class="rubric-text">${it.r[2]}</div></div>
+                    <div class="rubric-row"><div class="rubric-badge">${faDigits(scoreValue(it, 0))}</div><div class="rubric-text">${it.r[0]}</div></div>
+                    <div class="rubric-row"><div class="rubric-badge">${faDigits(scoreValue(it, 1))}</div><div class="rubric-text">${it.r[1]}</div></div>
+                    <div class="rubric-row"><div class="rubric-badge">${faDigits(scoreValue(it, 2))}</div><div class="rubric-text">${it.r[2]}</div></div>
                   </div>
                 </div>
                 <div class="opts" data-code="${it.code}">
@@ -810,9 +832,9 @@ function updateRecommendations(){
 }
 
 function bandFor(score){
-  if (score <= 20) return {label:'عملکرد ضعیف (قرمز)', color:'var(--red)', bg:'var(--red-bg)', hex:'#c1473f'};
-  if (score <= 33) return {label:'کمتر از حد انتظار (نارنجی)', color:'var(--orange)', bg:'var(--orange-bg)', hex:'#d98a35'};
-  if (score <= 52) return {label:'نسبتاً قابل‌قبول (زرد)', color:'var(--yellow)', bg:'var(--yellow-bg)', hex:'#d8b23a'};
+  if (score <= 29) return {label:'عملکرد ضعیف (قرمز)', color:'var(--red)', bg:'var(--red-bg)', hex:'#c1473f'};
+  if (score <= 47) return {label:'کمتر از حد انتظار (نارنجی)', color:'var(--orange)', bg:'var(--orange-bg)', hex:'#d98a35'};
+  if (score <= 74) return {label:'نسبتاً قابل‌قبول (زرد)', color:'var(--yellow)', bg:'var(--yellow-bg)', hex:'#d8b23a'};
   return {label:'قابل‌قبول (سبز)', color:'var(--green)', bg:'var(--green-bg)', hex:'#3f9152'};
 }
 
@@ -877,7 +899,7 @@ function buildPrintReport(){
       <div><b>تاریخ ارزیابی:</b> ${escapeHtml(dateText || '—')}</div>
     </div>
     <div class="pr-score-card">
-      <div class="pr-score-num">${faDigits(total)}<small> / ۷۰</small></div>
+      <div class="pr-score-num">${faDigits(total)}<small> / ${faDigits(MAX_SCORE)}</small></div>
       <div class="pr-score-info">
         <div class="pr-band" style="background:${band.bg};color:${band.color}">${band.label}</div>
         <div class="pr-progress"><div class="pr-progress-fill" style="width:${pct}%"></div></div>
@@ -893,10 +915,10 @@ function buildPrintReport(){
     <div class="pr-legend">
       <div class="pr-legend-title">راهنمای امتیاز کسب‌شده</div>
       <div class="pr-legend-grid">
-        <div class="pr-legend-item" style="background:var(--red-bg);color:var(--red)">۰-۲۰<span>عملکرد ضعیف</span></div>
-        <div class="pr-legend-item" style="background:var(--orange-bg);color:var(--orange)">۲۱-۳۳<span>کمتر از حد انتظار</span></div>
-        <div class="pr-legend-item" style="background:var(--yellow-bg);color:var(--yellow)">۳۴-۵۲<span>نسبتاً قابل‌قبول</span></div>
-        <div class="pr-legend-item" style="background:var(--green-bg);color:var(--green)">۵۳-۷۰<span>قابل‌قبول</span></div>
+        <div class="pr-legend-item" style="background:var(--red-bg);color:var(--red)">۰-۲۹<span>عملکرد ضعیف</span></div>
+        <div class="pr-legend-item" style="background:var(--orange-bg);color:var(--orange)">۳۰-۴۷<span>کمتر از حد انتظار</span></div>
+        <div class="pr-legend-item" style="background:var(--yellow-bg);color:var(--yellow)">۴۸-۷۴<span>نسبتاً قابل‌قبول</span></div>
+        <div class="pr-legend-item" style="background:var(--green-bg);color:var(--green)">۷۵-۱۰۰<span>قابل‌قبول</span></div>
       </div>
     </div>
     <div class="pr-footer">تهیه‌شده در تاریخ ${escapeHtml(new Date().toLocaleDateString('fa-IR'))} — سامانهٔ چک‌لیست ارزیابی شهر بدون دخانیات</div>
@@ -915,6 +937,7 @@ function updateAll(){
   Object.keys(answers).forEach(k => { if (answers[k] !== undefined) answeredCount++; });
 
   document.getElementById('scoreNum').textContent = faDigits(total);
+  document.getElementById('scoreMaxLabel').textContent = `از ${faDigits(MAX_SCORE)}`;
   document.getElementById('answeredText').textContent = `${faDigits(answeredCount)} از ${faDigits(TOTAL_ITEMS)} شاخص پاسخ داده شده`;
   document.getElementById('progressFill').style.width = (answeredCount / TOTAL_ITEMS * 100) + '%';
 
@@ -986,7 +1009,7 @@ document.getElementById('resetBtn').addEventListener('click', () => {
 document.getElementById('printBtn').addEventListener('click', () => { buildPrintReport(); window.print(); });
 
 function currentState(){
-  const totalScore = Object.values(answers).reduce((sum, value) => sum + Number(value || 0), 0);
+  const totalScore = scoreAnswers(answers);
   const date = evalDateValue;
   return {
     city: document.getElementById('cityName').value.trim(),
@@ -994,6 +1017,7 @@ function currentState(){
     date,
     dateText: date && date.jy ? `${date.jy}/${String(date.jm).padStart(2,'0')}/${String(date.jd).padStart(2,'0')}` : '',
     totalScore,
+    maxScore: MAX_SCORE,
     performanceBand: bandFor(totalScore).label,
     answeredCount: Object.keys(answers).length,
     questionCodes: DATA.flatMap(group => group.items.map(item => item.code)),
@@ -1168,9 +1192,9 @@ function matchProvinceSlug(cityNameRaw){
 }
 
 function mapBandColor(score){
-  if (score <= 20) return {fill:'#f6d9d6', text:'var(--red)'};
-  if (score <= 33) return {fill:'#f9e2c4', text:'var(--orange)'};
-  if (score <= 52) return {fill:'#f6ecb9', text:'var(--yellow)'};
+  if (score <= 29) return {fill:'#f6d9d6', text:'var(--red)'};
+  if (score <= 47) return {fill:'#f9e2c4', text:'var(--orange)'};
+  if (score <= 74) return {fill:'#f6ecb9', text:'var(--yellow)'};
   return {fill:'#c9e7cf', text:'var(--green)'};
 }
 
@@ -1265,7 +1289,7 @@ function showTooltip(slug, faName, x, y){
       .slice()
       .sort((a,b) => b.totalScore - a.totalScore)
       .forEach(r => {
-        html += `<div class="tt-row"><span>${r.city}</span><span>${r.totalScore}/۷۰</span></div>`;
+        html += `<div class="tt-row"><span>${r.city}</span><span>${r.totalScore}/${faDigits(MAX_SCORE)}</span></div>`;
       });
   }
   tooltip.innerHTML = html;
@@ -1322,7 +1346,7 @@ function renderUnmatchedPanel(unmatched){
     .map(slug => `<option value="${slug}">${PROVINCE_SLUG_TO_NAME[slug]}</option>`).join('');
   list.innerHTML = unmatched.map(r => `
     <div class="unmatched-row">
-      <div><span class="u-name">${r.city}</span><span class="u-score">${r.totalScore}/۷۰ — ${r.performanceBand||''}</span></div>
+      <div><span class="u-name">${r.city}</span><span class="u-score">${r.totalScore}/${faDigits(MAX_SCORE)} — ${r.performanceBand||''}</span></div>
       <select data-city="${r.city.replace(/"/g,'&quot;')}">
         <option value="">— انتخاب استان —</option>
         ${options}
@@ -1351,7 +1375,8 @@ async function refreshMap(){
       const state = byCity[city];
       if (!state) return;
       const slug = matchProvinceSlug(city);
-      const record = { city, totalScore: Number(state.totalScore || 0), performanceBand: state.performanceBand || '' };
+      const totalScore = state.answers ? scoreAnswers(state.answers) : Number(state.totalScore || 0);
+      const record = { city, totalScore, performanceBand: bandFor(totalScore).label };
       if (slug && PROVINCE_PATHS[slug]){
         (provinceRecords[slug] = provinceRecords[slug] || []).push(record);
       } else {
