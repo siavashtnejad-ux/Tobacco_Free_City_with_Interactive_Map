@@ -191,6 +191,7 @@
   .item-row{display:flex; align-items:flex-start; gap:10px; justify-content:space-between; flex-wrap:wrap;}
   .item-text{flex:1 1 320px; font-size:14.5px;}
   .item-text .code{color:var(--navy-700); font-weight:700; margin-left:6px;}
+  .four-point-star{color:#d98a2e; margin-left:4px; cursor:help;}
   .item-eval{font-size:11.5px; color:var(--ink-soft); margin-top:5px;}
   .item-eval::before{content:"روش ارزیابی: ";}
   .rubric-toggle{
@@ -683,6 +684,10 @@
     <input type="file" id="uploadPlanFileInput" accept="application/pdf" style="display:none">
   </div>
 
+  <p style="max-width:900px;margin:0 auto 10px;padding:0 4px;font-size:11.5px;color:var(--ink-soft);">
+    <span class="four-point-star">⭐</span> کنار شاخص‌هایی که بر مبنای امتیازهای ۰، ۲ و ۴ محاسبه می‌شوند نمایش داده می‌شود.
+  </p>
+
   <div class="steps" id="stepsContainer"></div>
 
   <div class="legend">
@@ -994,7 +999,7 @@ function render(){
             <div class="item">
               <div class="item-row">
                 <div class="item-text">
-                  <span class="code">${it.code}</span>${it.text}
+                  <span class="code">${it.code}</span>${FOUR_POINT_QUESTIONS.has(it.code) ? '<span class="four-point-star" title="این شاخص بر مبنای امتیازهای ۰، ۲ و ۴ محاسبه می‌شود">⭐</span> ' : ''}${it.text}
                   <div class="item-eval">${it.eval}</div>
                   <div class="rubric-toggle" data-target="rubric-${gi}-${ii}">نمایش معیار نمره‌دهی</div>
                   <div class="rubric" id="rubric-${gi}-${ii}">
@@ -1151,7 +1156,7 @@ function buildPrintReport(){
       return `
         <div class="pr-item">
           <div class="pr-item-main">
-            <div class="pr-item-text"><span class="pr-code">${escapeHtml(it.code)}</span>${escapeHtml(it.text)}</div>
+            <div class="pr-item-text"><span class="pr-code">${escapeHtml(it.code)}</span>${FOUR_POINT_QUESTIONS.has(it.code) ? '⭐ ' : ''}${escapeHtml(it.text)}</div>
             <div class="pr-badge ${badge.cls}">${badge.label}</div>
           </div>
           <div class="pr-item-meta"><b>روش ارزیابی:</b> ${escapeHtml(it.eval)}${ruleText ? ' — ' + escapeHtml(ruleText) : ''}</div>
