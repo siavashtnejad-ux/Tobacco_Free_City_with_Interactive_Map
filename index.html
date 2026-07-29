@@ -563,13 +563,236 @@
 .report-legend-item{ display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--ink-soft); }
 .report-legend-swatch{ width:10px; height:10px; border-radius:3px; flex:0 0 auto; }
 
+/* =========================================================
+   2026 UI/UX refinement layer
+   ========================================================= */
+:root{
+  --bg:#f4f7fb;
+  --surface-2:#f7f9fc;
+  --line:#dfe5ef;
+  --line-soft:#edf1f6;
+  --navy-900:#102a43;
+  --navy-700:#173f5f;
+  --navy-500:#176b87;
+  --accent:#0f8b8d;
+  --lilac:#e8f4f4;
+  --ring:0 0 0 4px rgba(15,139,141,.17);
+  --shadow:0 1px 2px rgba(16,42,67,.04), 0 14px 34px -24px rgba(16,42,67,.34);
+  --shadow-lg:0 30px 70px -34px rgba(16,42,67,.55);
+}
+body{
+  background:
+    radial-gradient(circle at 5% 18%, rgba(15,139,141,.055), transparent 25rem),
+    var(--bg);
+}
+.skip-link{
+  position:fixed; inset-block-start:12px; inset-inline-start:12px; z-index:2000;
+  transform:translateY(-180%); background:#fff; color:var(--navy-900);
+  border:2px solid var(--accent); border-radius:10px; padding:9px 14px;
+  font-weight:800; text-decoration:none; box-shadow:var(--shadow-lg);
+}
+.skip-link:focus{transform:translateY(0);}
+.hero{
+  padding-block:34px 96px;
+  background:
+    radial-gradient(80% 150% at 0% 0%, rgba(26,160,157,.36), transparent 58%),
+    radial-gradient(75% 130% at 100% -20%, rgba(73,115,177,.42), transparent 55%),
+    linear-gradient(135deg, #0d2e46 0%, #164d64 54%, #102a43 100%);
+}
+.hero::after{
+  opacity:.48;
+  background-size:auto, auto, 42px 42px, 42px 42px;
+}
+.hero-inner{max-width:1120px;}
+.hero-copy{max-width:780px;}
+.hero h1{font-size:clamp(27px,4.4vw,42px); line-height:1.35; margin-block:18px 10px;}
+.hero p{font-size:clamp(13px,1.5vw,15.5px); line-height:1.95;}
+.eyebrow{
+  background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.22);
+  box-shadow:inset 0 1px rgba(255,255,255,.08);
+}
+.view-tabs{
+  width:max-content; max-width:100%; padding:5px; gap:4px;
+  border:1px solid rgba(255,255,255,.18); border-radius:16px;
+  background:rgba(7,31,49,.25); backdrop-filter:blur(12px);
+  overflow-x:auto; scrollbar-width:none;
+}
+.view-tabs::-webkit-scrollbar{display:none;}
+.view-tab{border:0; border-radius:11px; padding:9px 16px; min-height:42px;}
+.view-tab.is-active{box-shadow:0 7px 18px -12px rgba(0,0,0,.6);}
+.wrap{max-width:1120px;}
+.id-card{padding:22px; border-radius:24px;}
+.field input, .date-readout{min-height:47px;}
+.dock{
+  top:10px; border-radius:18px; border-color:rgba(207,219,230,.9);
+  background:rgba(255,255,255,.91); box-shadow:0 12px 35px -25px rgba(16,42,67,.55);
+}
+.dock-actions{flex-direction:row; flex-wrap:wrap; justify-content:flex-end;}
+.dock-actions .btn{min-height:42px;}
+.btn{min-height:40px;}
+.btn-primary{
+  background:linear-gradient(135deg, #176b87, #0f8b8d);
+  box-shadow:0 12px 24px -13px rgba(15,139,141,.7);
+}
+.btn-primary:hover{box-shadow:0 16px 30px -14px rgba(15,139,141,.72);}
+.btn:focus-visible,
+.view-tab:focus-visible,
+.step-head:focus-visible,
+.rubric-toggle:focus-visible,
+.opt:focus-visible,
+select:focus-visible,
+input:focus-visible,
+.modal-close:focus-visible{
+  outline:3px solid rgba(15,139,141,.34); outline-offset:3px;
+}
+.step-navigator{
+  position:relative; margin-top:18px; padding:12px;
+  background:rgba(255,255,255,.83); border:1px solid var(--line);
+  border-radius:16px; box-shadow:var(--shadow); backdrop-filter:blur(12px);
+}
+.step-nav-label{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  color:var(--ink-soft); font-size:11.5px; font-weight:700; margin-bottom:9px;
+}
+.step-nav-scroll{
+  display:grid; grid-template-columns:repeat(10,minmax(78px,1fr)); gap:7px;
+  overflow-x:auto; padding-bottom:2px; scrollbar-width:thin;
+}
+.step-chip{
+  border:1px solid var(--line); background:#fff; color:var(--ink-soft);
+  border-radius:11px; padding:8px 7px; min-width:78px; cursor:pointer;
+  font-family:inherit; text-align:center; transition:.16s ease;
+}
+.step-chip:hover{border-color:#b9d3d7; transform:translateY(-1px);}
+.step-chip .chip-num{display:block; color:var(--navy-900); font-size:12px; font-weight:800;}
+.step-chip .chip-meta{display:block; font-size:9.5px; margin-top:1px;}
+.step-chip.is-started{border-color:#b7dfe0; background:#f1fafa;}
+.step-chip.is-complete{border-color:#b9d9c0; background:var(--green-bg);}
+.step-chip.is-complete .chip-num{color:var(--green);}
+.checklist-toolbar{
+  display:flex; align-items:center; gap:10px; margin-top:18px; padding:12px;
+  background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow-sm);
+}
+.checklist-search{position:relative; flex:1 1 300px;}
+.checklist-search svg{
+  position:absolute; inset-inline-start:13px; top:50%; transform:translateY(-50%);
+  width:18px; height:18px; color:var(--ink-faint); pointer-events:none;
+}
+.checklist-search input{
+  width:100%; min-height:43px; border:1.5px solid var(--line); border-radius:11px;
+  background:var(--surface-2); color:var(--ink); font:inherit; font-size:13px;
+  padding:9px 41px 9px 12px;
+}
+.checklist-search input:focus{outline:none; border-color:var(--accent); box-shadow:var(--ring); background:#fff;}
+.checklist-toolbar-actions{display:flex; gap:7px; flex-wrap:wrap;}
+.search-empty{
+  display:none; text-align:center; margin-top:14px; padding:28px 18px;
+  background:#fff; border:1px dashed #c8d3e0; border-radius:16px; color:var(--ink-soft);
+}
+.steps{margin-top:14px;}
+.step{scroll-margin-top:132px; border-radius:17px;}
+.step-head{
+  width:100%; border:0; background:transparent; color:inherit; font-family:inherit;
+  text-align:start; min-height:72px;
+}
+.step-head[aria-expanded="true"]{background:linear-gradient(90deg, rgba(232,244,244,.65), transparent);}
+.step-titles .t-fa,.step-meta{display:block;}
+.step-num{
+  background:linear-gradient(145deg, #e5f4f4, #d6eded); color:#125b68;
+}
+.step-score{background:#e9f5f5; color:#176b6d;}
+.rubric-toggle{
+  appearance:none; background:none; border:0; border-bottom:1px dashed currentColor;
+  padding:2px 0; font-family:inherit;
+}
+.item{scroll-margin-top:145px;}
+.item.is-unanswered{animation:unansweredPulse 1.15s ease;}
+@keyframes unansweredPulse{
+  0%,100%{background:transparent;}
+  35%{background:#fff7df; box-shadow:inset -4px 0 #d8b23a;}
+}
+.opts{background:#f3f6f9;}
+.opt{min-height:38px;}
+.opt[aria-pressed="true"]{transform:translateY(-1px);}
+.login-overlay{
+  background:rgba(7,25,39,.72); backdrop-filter:blur(8px);
+}
+.login-card{
+  max-width:410px; padding:28px; border-radius:24px;
+  box-shadow:0 34px 90px -35px rgba(3,20,31,.72);
+}
+.login-brand{
+  width:46px; height:46px; margin-bottom:13px; display:grid; place-items:center;
+  border-radius:15px; background:linear-gradient(145deg,#176b87,#0f8b8d);
+  color:#fff; font-size:22px; box-shadow:0 12px 26px -14px rgba(15,139,141,.8);
+}
+.login-card h2{font-size:18px; line-height:1.7; margin-bottom:4px;}
+.login-sub{font-size:12.5px; line-height:1.8; margin-bottom:16px;}
+.login-tabs{border-radius:11px; padding:4px; margin-bottom:15px;}
+.login-tab{border:0; background:transparent; font-family:inherit; min-height:38px; border-radius:8px;}
+.login-tab.is-active{background:#fff; color:var(--navy-900); box-shadow:var(--shadow-sm);}
+.login-field{margin-bottom:11px; gap:5px;}
+.login-field label{font-size:12px;}
+.login-field input, .login-field select{min-height:43px; font-size:13.5px; padding:8px 11px;}
+.login-submit{min-height:44px; font-size:13.5px;}
+.overlay{backdrop-filter:blur(6px);}
+.modal{border-radius:22px; padding:24px;}
+.toast{max-width:min(92vw,560px); text-align:center;}
+.sr-only{
+  position:absolute!important; width:1px!important; height:1px!important; padding:0!important;
+  margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important; border:0!important;
+}
+@media (max-width:900px){
+  .step-nav-scroll{grid-template-columns:repeat(10,84px);}
+}
+@media (max-width:720px){
+  body{padding-bottom:42px;}
+  .hero{padding:28px 16px 88px;}
+  .wrap{padding-inline:14px;}
+  .id-card{padding:17px;}
+  .dock{
+    display:grid; grid-template-columns:60px minmax(0,1fr); gap:12px;
+    padding:12px; top:7px;
+  }
+  .gauge,.gauge svg{width:60px; height:60px;}
+  .dock-actions{grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr;}
+  .dock-actions .btn{padding-inline:10px;}
+  .step-navigator{padding:10px;}
+  .checklist-toolbar{align-items:stretch; flex-direction:column;}
+  .checklist-search{flex-basis:auto;}
+  .checklist-toolbar-actions{display:grid; grid-template-columns:1fr 1fr;}
+  .step-head{gap:10px; padding:14px 13px;}
+  .step-score{font-size:11px; padding:5px 8px;}
+  .item{padding-inline:0;}
+  .opts{width:100%; display:grid; grid-template-columns:repeat(3,1fr);}
+  .opt{padding-inline:6px;}
+  .view-tabs{flex-wrap:nowrap;}
+  .user-info-row{align-items:flex-start;}
+}
+@media (max-width:480px){
+  .hero h1{font-size:25px;}
+  .hero p{font-size:12.5px;}
+  .view-tab{padding-inline:13px; font-size:12.5px;}
+  .step-titles .t-fa{font-size:14px;}
+  .step-meta{font-size:11px;}
+  .step-num{width:34px; height:34px;}
+  .login-overlay{padding:10px; align-items:flex-end;}
+  .login-card{padding:22px 18px; border-radius:22px 22px 0 0; max-height:92vh; overflow:auto;}
+  .modal{padding:19px; border-radius:20px;}
+  .compare-summary{grid-template-columns:1fr;}
+}
+
 </style>
 </head>
 <body>
 
-<div class="login-overlay" id="loginOverlay">
+<a class="skip-link" href="#mainContent">پرش به محتوای اصلی</a>
+
+<div class="login-overlay" id="loginOverlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
   <div class="login-card">
-    <h2>🔐 ورود به سامانه ارزیابی شهر بدون دخانیات</h2>
+    <div class="login-brand" aria-hidden="true">✓</div>
+    <h2 id="loginTitle">ورود به سامانه ارزیابی شهر بدون دخانیات</h2>
     <p class="login-sub" id="loginModeHint">برای استفاده از سامانه، وارد حساب کاربری خود شوید.</p>
 
     <div class="login-tabs">
@@ -579,11 +802,11 @@
 
     <div class="login-field" id="loginNameField" style="display:none">
       <label for="loginName">نام و نام خانوادگی</label>
-      <input type="text" id="loginName" placeholder="مثلاً: علی محمدی">
+      <input type="text" id="loginName" placeholder="مثلاً: علی محمدی" autocomplete="name">
     </div>
     <div class="login-field" id="loginEmailField">
       <label for="loginEmail">ایمیل</label>
-      <input type="email" id="loginEmail" placeholder="name@example.com" dir="ltr">
+      <input type="email" id="loginEmail" placeholder="name@example.com" dir="ltr" autocomplete="email">
     </div>
     <div class="login-field" id="loginNationalIdField" style="display:none">
       <label for="loginNationalId">شماره ملی</label>
@@ -599,7 +822,7 @@
     </div>
     <div class="login-field" id="loginPasswordField">
       <label for="loginPassword">رمز عبور</label>
-      <input type="password" id="loginPassword" placeholder="حداقل ۶ کاراکتر" dir="ltr">
+      <input type="password" id="loginPassword" placeholder="حداقل ۶ کاراکتر" dir="ltr" autocomplete="current-password">
     </div>
 
     <p class="login-note" id="loginSignupNote" style="display:none">
@@ -618,17 +841,19 @@
 </div>
 
 
-<div class="hero">
+<header class="hero">
   <div class="hero-inner">
-    <span class="eyebrow">۱۰ گام برای شهر بدون دخانیات</span>
-    <h1>چک‌لیست ارزیابی شهر بدون دخانیات</h1>
-    <p>بر اساس «راهنمای گام‌به‌گام پیاده‌سازی شهر بدون دخانیات» — جمعیت مبارزه با دخانیات ایران. ۳۵ شاخص را برای شهر یا شهرستان خود تکمیل کنید تا امتیاز و وضعیت عملکرد به‌صورت زنده محاسبه شود.</p>
-    <div class="view-tabs" role="tablist">
-      <button type="button" class="view-tab is-active" id="tabAssessBtn" role="tab" aria-selected="true" data-min-level="1">تکمیل ارزیابی</button>
-      <button type="button" class="view-tab" id="tabMapBtn" role="tab" aria-selected="false" data-min-level="1">نقشهٔ امتیازها</button>
-      <button type="button" class="view-tab" id="tabCompareBtn" role="tab" aria-selected="false" data-min-level="2">مقایسه شهرها</button>
-      <button type="button" class="view-tab" id="tabReportBtn" role="tab" aria-selected="false" data-min-level="3">گزارش نموداری</button>
+    <div class="hero-copy">
+      <span class="eyebrow">۱۰ گام برای شهر بدون دخانیات</span>
+      <h1>چک‌لیست ارزیابی شهر بدون دخانیات</h1>
+      <p>بر اساس «راهنمای گام‌به‌گام پیاده‌سازی شهر بدون دخانیات» — جمعیت مبارزه با دخانیات ایران. ۳۵ شاخص را برای شهر یا شهرستان خود تکمیل کنید تا امتیاز و وضعیت عملکرد به‌صورت زنده محاسبه شود.</p>
     </div>
+    <nav class="view-tabs" role="tablist" aria-label="بخش‌های سامانه">
+      <button type="button" class="view-tab is-active" id="tabAssessBtn" role="tab" aria-selected="true" aria-controls="assessmentView" data-min-level="1">تکمیل ارزیابی</button>
+      <button type="button" class="view-tab" id="tabMapBtn" role="tab" aria-selected="false" aria-controls="mapView" data-min-level="1">نقشهٔ امتیازها</button>
+      <button type="button" class="view-tab" id="tabCompareBtn" role="tab" aria-selected="false" aria-controls="compareView" data-min-level="2">مقایسه شهرها</button>
+      <button type="button" class="view-tab" id="tabReportBtn" role="tab" aria-selected="false" aria-controls="reportView" data-min-level="3">گزارش نموداری</button>
+    </nav>
     <div class="user-info-row" id="userInfoRow" style="display:none">
       <span id="userInfoText"></span>
       <span class="role-badge" id="userRoleBadge"></span>
@@ -637,9 +862,10 @@
       <button class="btn btn-ghost u-logout" id="logoutBtn" type="button">خروج</button>
     </div>
   </div>
-</div>
+</header>
 
-<div class="wrap" id="assessmentView">
+<main class="wrap" id="assessmentView" role="tabpanel" aria-labelledby="tabAssessBtn">
+  <span id="mainContent" tabindex="-1" class="sr-only">محتوای اصلی ارزیابی</span>
 
   <div class="id-card">
     <div class="field">
@@ -670,17 +896,37 @@
       <div class="answered" id="answeredText">۰ از ۳۵ شاخص پاسخ داده شده</div>
     </div>
     <div class="dock-actions">
-      <button class="btn btn-primary" id="saveBtn">ذخیرهٔ ارزیابی</button>
-      <button class="btn btn-ghost" id="resetBtn">پاک‌کردن پاسخ‌ها</button>
+      <button type="button" class="btn btn-primary" id="saveBtn">ذخیرهٔ ارزیابی</button>
+      <button type="button" class="btn btn-ghost" id="resetBtn">پاک‌کردن پاسخ‌ها</button>
+    </div>
+  </div>
+
+  <nav class="step-navigator" aria-label="پیشرفت گام‌های ارزیابی">
+    <div class="step-nav-label">
+      <span>دسترسی سریع به گام‌ها</span>
+      <span id="stepNavSummary">۰ از ۱۰ گام تکمیل شده</span>
+    </div>
+    <div class="step-nav-scroll" id="stepNavigator"></div>
+  </nav>
+
+  <div class="checklist-toolbar" role="group" aria-label="ابزارهای چک‌لیست">
+    <label class="checklist-search">
+      <span class="sr-only">جستجو در شاخص‌ها</span>
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="checklistSearch" type="search" placeholder="جستجو در عنوان گام، کد یا متن شاخص…" autocomplete="off">
+    </label>
+    <div class="checklist-toolbar-actions">
+      <button class="btn btn-ghost btn-sm" id="nextUnansweredBtn" type="button">اولین شاخص بی‌پاسخ</button>
+      <button class="btn btn-ghost btn-sm" id="collapseAllBtn" type="button">بستن همه</button>
     </div>
   </div>
 
   <div class="saved-bar">
-    <button class="btn btn-ghost btn-sm" id="loadBtn">📂 بازکردن ارزیابی</button>
-    <button class="btn btn-ghost btn-sm" id="printBtn">چاپ / PDF</button>
-    <button class="btn btn-ghost btn-sm" id="uploadPlanBtn" data-min-level="2" style="display:none">📎 آپلود فایل برنامه‌های عملیاتی</button>
-    <button class="btn btn-ghost btn-sm" id="viewPlansBtn" data-min-level="2" style="display:none">📂 فایل‌های آپلودشده</button>
-    <button class="btn btn-ghost btn-sm" id="exportCsvBtn" data-min-level="2" style="display:none">⬇️ خروجی CSV</button>
+    <button type="button" class="btn btn-ghost btn-sm" id="loadBtn">📂 بازکردن ارزیابی</button>
+    <button type="button" class="btn btn-ghost btn-sm" id="printBtn">چاپ / PDF</button>
+    <button type="button" class="btn btn-ghost btn-sm" id="uploadPlanBtn" data-min-level="2" style="display:none">📎 آپلود فایل برنامه‌های عملیاتی</button>
+    <button type="button" class="btn btn-ghost btn-sm" id="viewPlansBtn" data-min-level="2" style="display:none">📂 فایل‌های آپلودشده</button>
+    <button type="button" class="btn btn-ghost btn-sm" id="exportCsvBtn" data-min-level="2" style="display:none">⬇️ خروجی CSV</button>
     <input type="file" id="uploadPlanFileInput" accept="application/pdf" style="display:none">
   </div>
 
@@ -689,6 +935,7 @@
   </p>
 
   <div class="steps" id="stepsContainer"></div>
+  <div class="search-empty" id="searchEmpty" role="status">شاخصی مطابق عبارت جستجو پیدا نشد.</div>
 
   <div class="legend">
     <h3>راهنمای امتیاز کسب‌شده</h3>
@@ -699,9 +946,9 @@
       <div class="legend-item" style="background:var(--green-bg); color:var(--green);">۷۵-۱۰۰<span>قابل‌قبول (سبز)</span></div>
     </div>
   </div>
-</div>
+</main>
 
-<div class="wrap" id="mapView" style="display:none">
+<section class="wrap" id="mapView" role="tabpanel" aria-labelledby="tabMapBtn" style="display:none">
 
   <div class="map-toolbar">
     <button class="btn btn-ghost btn-sm" id="mapRefreshBtn" type="button">بروزرسانی نقشه</button>
@@ -732,9 +979,9 @@
     <div id="unmatchedList"></div>
   </div>
 
-</div>
+</section>
 
-<div class="wrap" id="compareView" style="display:none">
+<section class="wrap" id="compareView" role="tabpanel" aria-labelledby="tabCompareBtn" style="display:none">
   <div class="compare-picker">
     <div class="compare-picker-col">
       <label>شهر اول</label>
@@ -749,9 +996,9 @@
   </div>
   <div id="compareStatus">در حال بارگذاری ارزیابی‌های موجود…</div>
   <div id="compareResults"></div>
-</div>
+</section>
 
-<div class="wrap" id="reportView" style="display:none">
+<section class="wrap" id="reportView" role="tabpanel" aria-labelledby="tabReportBtn" style="display:none">
   <div class="report-picker-head">
     <h3>شهرهای موردنظر برای گزارش نموداری را انتخاب کنید</h3>
     <div class="report-picker-actions">
@@ -763,13 +1010,13 @@
   <div id="reportCityList" class="report-city-list"></div>
   <div id="reportStatus">در حال بارگذاری ارزیابی‌های موجود…</div>
   <div id="reportChartArea"></div>
-</div>
+</section>
 
-<div class="overlay" id="modalOverlay">
+<div class="overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="loadModalTitle">
   <div class="modal">
-    <h3>📂 ارزیابی‌های ذخیره‌شده</h3>
+    <h3 id="loadModalTitle">ارزیابی‌های ذخیره‌شده</h3>
     <div id="modalList" class="modal-list"></div>
-    <button class="modal-close" id="modalCloseBtn">بستن</button>
+    <button type="button" class="modal-close" id="modalCloseBtn">بستن</button>
   </div>
 </div>
 
@@ -777,7 +1024,7 @@
   <div class="modal">
     <h3>✅ درخواست‌های دسترسی در انتظار تأیید</h3>
     <div id="approvalsList" class="modal-list"></div>
-    <button class="modal-close" id="approvalsModalCloseBtn">بستن</button>
+    <button type="button" class="modal-close" id="approvalsModalCloseBtn">بستن</button>
   </div>
 </div>
 
@@ -793,7 +1040,7 @@
     <button class="btn btn-primary login-submit" id="grantAdminBtn" type="button" style="margin-bottom:16px;">اعطای دسترسی مدیریت</button>
     <h4 style="margin:0 0 8px;font-size:13px;color:var(--navy-900);">مدیران فعلی</h4>
     <div id="adminsList" class="modal-list"></div>
-    <button class="modal-close" id="adminsModalCloseBtn">بستن</button>
+    <button type="button" class="modal-close" id="adminsModalCloseBtn">بستن</button>
   </div>
 </div>
 
@@ -802,13 +1049,13 @@
     <h3>📂 فایل‌های برنامه‌های عملیاتی</h3>
     <button class="btn btn-ghost" id="plansBackBtn" type="button" style="display:none;margin-bottom:10px;width:100%;">→ بازگشت به فهرست شهرها</button>
     <div id="plansList" class="modal-list"></div>
-    <button class="modal-close" id="plansModalCloseBtn">بستن</button>
+    <button type="button" class="modal-close" id="plansModalCloseBtn">بستن</button>
   </div>
 </div>
 
 <div id="printReport" class="print-only"></div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
@@ -955,6 +1202,7 @@ const TOTAL_ITEMS = DATA.reduce((s,g)=>s+g.items.length,0);
 const answers = {};
 
 const stepsContainer = document.getElementById('stepsContainer');
+const stepNavigator = document.getElementById('stepNavigator');
 
 function faDigits(n){
   const map = {0:'۰',1:'۱',2:'۲',3:'۳',4:'۴',5:'۵',6:'۶',7:'۷',8:'۸',9:'۹'};
@@ -978,43 +1226,69 @@ function stepScore(group){
 }
 const MAX_SCORE = DATA.reduce((sum, group) => sum + stepMaxScore(group), 0);
 
+function setStepOpen(stepEl, shouldOpen){
+  const head = stepEl.querySelector('.step-head');
+  const body = stepEl.querySelector('.step-body');
+  stepEl.classList.toggle('open', shouldOpen);
+  head.setAttribute('aria-expanded', String(shouldOpen));
+  body.style.maxHeight = shouldOpen ? body.scrollHeight + 'px' : null;
+}
+
+function renderStepNavigator(){
+  stepNavigator.innerHTML = DATA.map((group, gi) => `
+    <button class="step-chip" type="button" data-step-index="${gi}" aria-label="رفتن به گام ${faDigits(group.step)}">
+      <span class="chip-num">گام ${faDigits(group.step)}</span>
+      <span class="chip-meta" id="stepChipMeta-${gi}">۰ از ${faDigits(group.items.length)}</span>
+    </button>
+  `).join('');
+  stepNavigator.querySelectorAll('.step-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const stepEl = stepsContainer.children[Number(chip.dataset.stepIndex)];
+      if (!stepEl) return;
+      setStepOpen(stepEl, true);
+      stepEl.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
 function render(){
   stepsContainer.innerHTML = '';
   DATA.forEach((group, gi) => {
     const stepEl = document.createElement('div');
     stepEl.className = 'step' + (gi === 0 ? ' open' : '');
+    stepEl.dataset.stepIndex = gi;
     stepEl.innerHTML = `
-      <div class="step-head" data-idx="${gi}">
-        <div class="step-num">${faDigits(group.step)}</div>
-        <div class="step-titles">
-          <div class="t-fa">گام ${faDigits(group.step)}: ${group.title}</div>
-          <div class="step-meta">${faDigits(group.items.length)} شاخص</div>
-        </div>
-        <div class="step-score" id="stepScore-${gi}">۰ / ${faDigits(stepMaxScore(group))}</div>
+      <button type="button" class="step-head" id="stepHead-${gi}" data-idx="${gi}" aria-expanded="${gi === 0 ? 'true' : 'false'}" aria-controls="stepBody-${gi}">
+        <span class="step-num">${faDigits(group.step)}</span>
+        <span class="step-titles">
+          <span class="t-fa">گام ${faDigits(group.step)}: ${group.title}</span>
+          <span class="step-meta">${faDigits(group.items.length)} شاخص</span>
+        </span>
+        <span class="step-score" id="stepScore-${gi}">۰ / ${faDigits(stepMaxScore(group))}</span>
         <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="step-body" id="stepBody-${gi}">
+      </button>
+      <div class="step-body" id="stepBody-${gi}" role="region" aria-labelledby="stepHead-${gi}">
         <div class="step-body-inner">
           ${group.items.map((it, ii) => `
-            <div class="item">
+            <article class="item" data-code="${it.code}" data-search="${escapeHtml(`${group.title} ${it.code} ${it.text} ${it.eval}`.toLocaleLowerCase('fa-IR'))}">
               <div class="item-row">
                 <div class="item-text">
                   <span class="code">${it.code}</span>${FOUR_POINT_QUESTIONS.has(it.code) ? '<span class="four-point-star" title="این شاخص بر مبنای امتیازهای ۰، ۲ و ۴ محاسبه می‌شود">⭐</span> ' : ''}${it.text}
                   <div class="item-eval">${it.eval}</div>
-                  <div class="rubric-toggle" data-target="rubric-${gi}-${ii}">نمایش معیار نمره‌دهی</div>
+                  <button type="button" class="rubric-toggle" data-target="rubric-${gi}-${ii}" aria-expanded="false" aria-controls="rubric-${gi}-${ii}">نمایش معیار نمره‌دهی</button>
                   <div class="rubric" id="rubric-${gi}-${ii}">
                     <div class="rubric-row"><div class="rubric-badge">${faDigits(scoreValue(it, 0))}</div><div class="rubric-text">${it.r[0]}</div></div>
                     <div class="rubric-row"><div class="rubric-badge">${faDigits(scoreValue(it, 1))}</div><div class="rubric-text">${it.r[1]}</div></div>
                     <div class="rubric-row"><div class="rubric-badge">${faDigits(scoreValue(it, 2))}</div><div class="rubric-text">${it.r[2]}</div></div>
                   </div>
                 </div>
-                <div class="opts" data-code="${it.code}">
-                  <button class="opt" data-v="0">انجام‌نشده</button>
-                  <button class="opt" data-v="1">ناکامل</button>
-                  <button class="opt" data-v="2">کامل</button>
+                <div class="opts" data-code="${it.code}" role="group" aria-label="امتیاز شاخص ${it.code}">
+                  <button type="button" class="opt" data-v="0" aria-pressed="false">انجام‌نشده</button>
+                  <button type="button" class="opt" data-v="1" aria-pressed="false">ناکامل</button>
+                  <button type="button" class="opt" data-v="2" aria-pressed="false">کامل</button>
                 </div>
               </div>
-            </div>
+            </article>
           `).join('')}
           <section class="recommendation-panel" id="recommendation-${gi}" hidden aria-live="polite"></section>
         </div>
@@ -1026,10 +1300,8 @@ function render(){
   stepsContainer.querySelectorAll('.step-head').forEach(head => {
     head.addEventListener('click', () => {
       const stepEl = head.closest('.step');
-      const body = stepEl.querySelector('.step-body');
       const isOpen = stepEl.classList.contains('open');
-      if (isOpen){ body.style.maxHeight = null; stepEl.classList.remove('open'); }
-      else { stepEl.classList.add('open'); body.style.maxHeight = body.scrollHeight + 'px'; }
+      setStepOpen(stepEl, !isOpen);
     });
   });
 
@@ -1038,6 +1310,7 @@ function render(){
       const target = document.getElementById(t.dataset.target);
       const nowOpen = target.classList.toggle('open');
       t.textContent = nowOpen ? 'پنهان‌کردن معیار نمره‌دهی' : 'نمایش معیار نمره‌دهی';
+      t.setAttribute('aria-expanded', String(nowOpen));
       const stepBody = t.closest('.step-body');
       if (stepBody) stepBody.style.maxHeight = stepBody.scrollHeight + 'px';
     });
@@ -1049,7 +1322,11 @@ function render(){
         const code = optsEl.dataset.code;
         const v = parseInt(btn.dataset.v, 10);
         answers[code] = v;
-        optsEl.querySelectorAll('.opt').forEach(b => b.classList.toggle('sel', b === btn));
+        optsEl.querySelectorAll('.opt').forEach(b => {
+          const selected = b === btn;
+          b.classList.toggle('sel', selected);
+          b.setAttribute('aria-pressed', String(selected));
+        });
         updateAll();
       });
     });
@@ -1217,6 +1494,14 @@ function updateAll(){
     total += s;
     const el = document.getElementById(`stepScore-${gi}`);
     if (el) el.textContent = `${faDigits(s)} / ${faDigits(stepMaxScore(group))}`;
+    const answeredInStep = group.items.filter(item => answers[item.code] !== undefined).length;
+    const chip = stepNavigator.querySelector(`[data-step-index="${gi}"]`);
+    const chipMeta = document.getElementById(`stepChipMeta-${gi}`);
+    if (chip){
+      chip.classList.toggle('is-started', answeredInStep > 0 && answeredInStep < group.items.length);
+      chip.classList.toggle('is-complete', answeredInStep === group.items.length);
+    }
+    if (chipMeta) chipMeta.textContent = `${faDigits(answeredInStep)} از ${faDigits(group.items.length)}`;
   });
   Object.keys(answers).forEach(k => { if (answers[k] !== undefined) answeredCount++; });
 
@@ -1224,6 +1509,8 @@ function updateAll(){
   document.getElementById('scoreMaxLabel').textContent = `از ${faDigits(MAX_SCORE)}`;
   document.getElementById('answeredText').textContent = `${faDigits(answeredCount)} از ${faDigits(TOTAL_ITEMS)} شاخص پاسخ داده شده`;
   document.getElementById('progressFill').style.width = (answeredCount / TOTAL_ITEMS * 100) + '%';
+  const completedSteps = DATA.filter(group => group.items.every(item => answers[item.code] !== undefined)).length;
+  document.getElementById('stepNavSummary').textContent = `${faDigits(completedSteps)} از ${faDigits(DATA.length)} گام تکمیل شده`;
 
   const band = bandFor(total);
   const tag = document.getElementById('bandTag');
@@ -1240,8 +1527,53 @@ function updateAll(){
   updateRecommendations();
 }
 
+renderStepNavigator();
 render();
 updateAll();
+
+function normalizeSearchText(value){
+  return String(value || '').toLocaleLowerCase('fa-IR').replace(/[يى]/g,'ی').replace(/ك/g,'ک').trim();
+}
+
+document.getElementById('checklistSearch').addEventListener('input', e => {
+  const query = normalizeSearchText(e.target.value);
+  let visibleCount = 0;
+  stepsContainer.querySelectorAll('.step').forEach(stepEl => {
+    let stepMatches = 0;
+    stepEl.querySelectorAll('.item').forEach(itemEl => {
+      const matches = !query || normalizeSearchText(itemEl.dataset.search).includes(query);
+      itemEl.style.display = matches ? '' : 'none';
+      if (matches) stepMatches++;
+    });
+    stepEl.style.display = stepMatches ? '' : 'none';
+    if (query && stepMatches) setStepOpen(stepEl, true);
+    visibleCount += stepMatches;
+  });
+  document.getElementById('searchEmpty').style.display = visibleCount ? 'none' : 'block';
+});
+
+document.getElementById('collapseAllBtn').addEventListener('click', () => {
+  stepsContainer.querySelectorAll('.step').forEach(stepEl => setStepOpen(stepEl, false));
+});
+
+document.getElementById('nextUnansweredBtn').addEventListener('click', () => {
+  const nextItem = DATA.flatMap(group => group.items).find(item => answers[item.code] === undefined);
+  if (!nextItem){
+    showToast('همهٔ شاخص‌ها پاسخ داده شده‌اند.');
+    return;
+  }
+  const itemEl = stepsContainer.querySelector(`.item[data-code="${nextItem.code}"]`);
+  if (!itemEl) return;
+  const searchInput = document.getElementById('checklistSearch');
+  if (searchInput.value){
+    searchInput.value = '';
+    searchInput.dispatchEvent(new Event('input'));
+  }
+  setStepOpen(itemEl.closest('.step'), true);
+  itemEl.scrollIntoView({behavior:'smooth', block:'center'});
+  itemEl.classList.remove('is-unanswered');
+  requestAnimationFrame(() => itemEl.classList.add('is-unanswered'));
+});
 
 // ---------- Jalali calendar ----------
 function jGregorianToJalali(gy, gm, gd){
@@ -1284,8 +1616,12 @@ function showToast(msg){
 }
 
 document.getElementById('resetBtn').addEventListener('click', () => {
+  if (Object.keys(answers).length && !confirm('همهٔ پاسخ‌های ثبت‌شده پاک شوند؟ این کار قابل بازگشت نیست.')) return;
   Object.keys(answers).forEach(k => delete answers[k]);
-  document.querySelectorAll('.opt.sel').forEach(b => b.classList.remove('sel'));
+  document.querySelectorAll('.opt.sel').forEach(b => {
+    b.classList.remove('sel');
+    b.setAttribute('aria-pressed','false');
+  });
   updateAll();
   showToast('پاسخ‌ها پاک شدند.');
 });
@@ -1372,7 +1708,9 @@ function applyState(state){
   document.querySelectorAll('.opts').forEach(optsEl => {
     const code = optsEl.dataset.code;
     optsEl.querySelectorAll('.opt').forEach(b => {
-      b.classList.toggle('sel', answers[code] !== undefined && parseInt(b.dataset.v,10) === Number(answers[code]));
+      const selected = answers[code] !== undefined && parseInt(b.dataset.v,10) === Number(answers[code]);
+      b.classList.toggle('sel', selected);
+      b.setAttribute('aria-pressed', String(selected));
     });
   });
   updateAll();
@@ -1692,10 +2030,14 @@ let mapLoadedOnce = false;
 
 function activateTab(activeBtn, activeView){
   [tabAssessBtn, tabMapBtn, tabCompareBtn, tabReportBtn].forEach(b => {
-    b.classList.remove('is-active'); b.setAttribute('aria-selected','false');
+    b.classList.remove('is-active'); b.setAttribute('aria-selected','false'); b.setAttribute('tabindex','-1');
   });
-  [assessmentView, mapView, compareView, reportView].forEach(v => v.style.display = 'none');
-  activeBtn.classList.add('is-active'); activeBtn.setAttribute('aria-selected','true');
+  [assessmentView, mapView, compareView, reportView].forEach(v => {
+    v.style.display = 'none';
+    v.setAttribute('hidden','');
+  });
+  activeBtn.classList.add('is-active'); activeBtn.setAttribute('aria-selected','true'); activeBtn.setAttribute('tabindex','0');
+  activeView.removeAttribute('hidden');
   activeView.style.display = '';
 }
 tabAssessBtn.addEventListener('click', () => activateTab(tabAssessBtn, assessmentView));
@@ -1710,6 +2052,21 @@ tabCompareBtn.addEventListener('click', () => {
 tabReportBtn.addEventListener('click', () => {
   activateTab(tabReportBtn, reportView);
   loadReportRecords();
+});
+[tabAssessBtn, tabMapBtn, tabCompareBtn, tabReportBtn].forEach((tab, index, tabs) => {
+  tab.addEventListener('keydown', e => {
+    if (!['ArrowRight','ArrowLeft','Home','End'].includes(e.key)) return;
+    e.preventDefault();
+    const visibleTabs = tabs.filter(item => item.style.display !== 'none');
+    const currentIndex = visibleTabs.indexOf(tab);
+    let targetIndex = currentIndex;
+    if (e.key === 'Home') targetIndex = 0;
+    else if (e.key === 'End') targetIndex = visibleTabs.length - 1;
+    else if (e.key === 'ArrowRight') targetIndex = (currentIndex - 1 + visibleTabs.length) % visibleTabs.length;
+    else targetIndex = (currentIndex + 1) % visibleTabs.length;
+    visibleTabs[targetIndex].focus();
+    visibleTabs[targetIndex].click();
+  });
 });
 
 /* =========================================================
